@@ -9,3 +9,5 @@ The .exe will look for these nine files:
 {unit id}_RACE.cysp
 {unit id}_DEAR.cysp
 {unit id}_POSING.cysp
+
+DO NOT OPEN THESE FILES IN NOTEPAD, ONLY USE HxD TO MODIFY THEM BECAUSE ALL THE 0x00 BYTES WILL TRANFORM INTO 0x20
