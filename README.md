@@ -1,6 +1,6 @@
 # cysp2spine
 cysp to spine converter for solely Priconne.
-Right now, I have only tested it on pPeco and it works. This isn't the silver bullet to whatever solution you are seeking but I hope it helps.
+Right now, I have only tested it on pPeco and it works. <br />
 
 To use this program, first put all the cysp files into a folder with the unit-id amd then run it as main.exe {folder name}
 The .exe will look for these nine files: 
