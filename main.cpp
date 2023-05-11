@@ -4,15 +4,33 @@
 #include <string>
 #include <sstream>
 #include <filesystem>
-#include <vector>
-#include <Windows.h>
 
 using namespace std; // because I am lazy
 
 
-    fstream skel;
-    ostringstream fname;
-    
+fstream skel;
+ostringstream fname;
+int total_offset = 0;
+
+void extractAnimCount(string filename){
+    fstream fs;
+    char animCount[1];
+    fs.open(filename, ios::in | ios::out | ios::binary);
+    // cout << filename << endl; - if you want to see which file is being processed
+    char buf[13];
+    char byte;
+    fs.read(buf, sizeof(buf));
+    auto offset = ((uint32_t)(buf[12])+1)*32;
+    auto count = (uint32_t)(buf[12]);
+
+    if (offset == 4032) {
+        cout << "File not found" << endl;
+    } else {
+       total_offset += count; 
+    }
+
+    fs.close();
+}
 
 void extractData(string filename){
     fstream fs;
@@ -40,8 +58,9 @@ int main(int argc, char *argv[]) {
     skel.open(fname.str(), ios::in | ios::out | ios::binary | ios::app);
     
     const string pathFrag = fileName + "/" + fileName;
-    const string dir[9] = {
+    const string dir[10] = {
         pathFrag + "_CHARA_BASE.cysp",
+        "offset",
         pathFrag + "_COMMON_BATTLE.cysp",
         pathFrag + "_BATTLE.cysp",
         pathFrag + "_RUN_JUMP.cysp",
@@ -52,10 +71,20 @@ int main(int argc, char *argv[]) {
         pathFrag + "_POSING.cysp",
     };
     
-
+    for (auto& item : dir) {
+        if (item != "offset") {
+            extractAnimCount(item);
+        }
+    }
+    
     for (auto& item : dir) {
         cout << item << endl;
-        extractData(item);
+        
+        if (item == "offset") {
+            skel.put(static_cast<char>(total_offset-1));
+        } else {
+            extractData(item);
+        }
     }
 
     skel.close();
